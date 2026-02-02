@@ -1,241 +1,403 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Aishwarya</title>
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#0b0b12;
+      --card:rgba(255,255,255,0.06);
+      --stroke:rgba(255,255,255,0.12);
+      --text:rgba(255,255,255,0.92);
+      --muted:rgba(255,255,255,0.70);
+      --pink:#ff3b7b;
+      --cyan:#7aa2ff;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 20% 15%, rgba(255,59,123,0.25), transparent 60%),
+        radial-gradient(800px 500px at 75% 70%, rgba(122,162,255,0.20), transparent 55%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      overflow:hidden;
+    }
+
+    .card{
+      width:min(760px,92vw);
+      border:1px solid var(--stroke);
+      background:var(--card);
+      border-radius:28px;
+      padding:34px 22px 28px;
+      backdrop-filter:blur(14px);
+      box-shadow:0 20px 80px rgba(0,0,0,0.45);
+      text-align:center;
+      position:relative;
+    }
+
+    h1{
+      font-size:clamp(26px,4vw,44px);
+      margin:8px 0 10px;
+      line-height:1.15;
+    }
+
+    .glow{
+      display:inline-block;
+      background:linear-gradient(90deg,#ff3b7b,#ffd1dc,#ff3b7b);
+      background-size:200% auto;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:glowMove 2.4s linear infinite;
+      text-shadow:0 0 25px rgba(255,59,123,0.35);
+    }
+    @keyframes glowMove{ to{ background-position:200% center; } }
+
+    .sub{
+      color:var(--muted);
+      margin:0 0 16px;
+      font-size:15px;
+    }
+
+    .stage{
+      position:relative;
+      height:120px;
+      margin-top:18px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      transition:transform .12s ease;
+    }
+    .btn:active{ transform:scale(0.98); }
+
+    .yes{
+      background:linear-gradient(135deg,#ff3b7b,#ff7aa8);
+      color:white;
+      box-shadow:0 14px 40px rgba(255,59,123,0.35);
+    }
+
+    .no{
+      position:absolute;
+      left:56%;
+      top:8px;
+      background:rgba(255,255,255,0.08);
+      color:white;
+      border:1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .result{
+      display:none;
+      margin-top:18px;
+      padding:18px;
+      border-radius:18px;
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .result h2{
+      margin:0 0 6px;
+      font-size:22px;
+    }
+
+    .result p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      display:none;
+      overflow:hidden;
+    }
+    .confetti span{
+      position:absolute;
+      top:-10px;
+      width:10px;
+      height:10px;
+      border-radius:2px;
+      animation:fall 1.4s linear forwards;
+    }
+    @keyframes fall{
+      to{ transform:translate3d(var(--dx),110vh,0) rotate(720deg); }
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(0,0,0,0.18);
+      color:rgba(255,255,255,0.82);
+      font-size:13px;
+    }
+
+    .toggle{
+      appearance:none;
+      width:44px;
+      height:26px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.15);
+      position:relative;
+      outline:none;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,0.18);
+    }
+    .toggle::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:white;
+      transition:transform .18s ease;
+    }
+    .toggle:checked{
+      background:rgba(255,59,123,0.35);
+      border-color:rgba(255,59,123,0.55);
+    }
+    .toggle:checked::after{ transform:translateX(18px); }
+
+    .soundOverlay{
+      position:fixed;
+      inset:0;
+      display:grid;
+      place-items:center;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      z-index:999;
+    }
+    .soundBox{
+      width:min(520px,92vw);
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(0,0,0,0.25);
+      border-radius:22px;
+      padding:18px 18px 16px;
+      text-align:center;
+      box-shadow:0 16px 70px rgba(0,0,0,0.55);
+    }
+    .soundBox h3{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+    .soundBox p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .soundBtn{
+      background:linear-gradient(135deg,var(--cyan),#b1c6ff);
+      color:#091022;
+      border:0;
+      border-radius:999px;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
   </style>
 </head>
+
 <body>
-<p class="p1">&lt;!doctype html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1" /&gt;</p>
-<p class="p1">&lt;title&gt;For Aishwarya&lt;/title&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">:root{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--bg1:#0b1020;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--bg2:#0b0b12;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--card:rgba(255,255,255,0.06);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--stroke:rgba(255,255,255,0.12);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--text:rgba(255,255,255,0.92);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--muted:rgba(255,255,255,0.70);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--pink:#ff3b7b;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">*{box-sizing:border-box}</p>
-<p class="p2"><br></p>
-<p class="p1">body{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin:0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height:100svh;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:grid;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>place-items:center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:var(--text);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:</p>
-<p class="p1"><span class="Apple-converted-space">    </span>radial-gradient(900px 600px at 20% 15%, rgba(255,59,123,0.25), transparent 60%),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>radial-gradient(800px 500px at 75% 70%, rgba(122,162,255,0.20), transparent 55%),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>linear-gradient(180deg,var(--bg1),var(--bg2));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow:hidden;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.card{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width:min(720px,92vw);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--stroke);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:var(--card);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius:28px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:36px 22px 30px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>backdrop-filter:blur(14px);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow:0 20px 80px rgba(0,0,0,0.45);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align:center;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">h1{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:clamp(30px,4vw,44px);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin:14px 0 10px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.glow{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:linear-gradient(90deg,#ff3b7b,#ffd1dc,#ff3b7b);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background-size:200% auto;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>-webkit-background-clip:text;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>-webkit-text-fill-color:transparent;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation:glowMove 3s linear infinite;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-shadow:0 0 25px rgba(255,59,123,0.4);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes glowMove{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to{background-position:200% center}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">p{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:26px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.stage{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:relative;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height:110px;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.btn{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border:0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius:999px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:14px 22px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:16px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-weight:650;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>cursor:pointer;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.yes{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:linear-gradient(135deg,#ff3b7b,#ff7aa8);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:white;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow:0 14px 40px rgba(255,59,123,0.35);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.no{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>left:55%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top:15px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:rgba(255,255,255,0.08);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:white;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid rgba(255,255,255,0.15);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.result{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top:20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius:20px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:rgba(0,0,0,0.25);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.confetti{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:fixed;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>inset:0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointer-events:none;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:none;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">.confetti span{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>top:-10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width:10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>height:10px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border-radius:2px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>animation:fall 1.4s linear forwards;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">@keyframes fall{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>transform:translate3d(var(--dx),110vh,0) rotate(720deg);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="glow"&gt;Aishwarya&lt;/span&gt;, will you be my Valentine?</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;— Shivang asking, respectfully 😌&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="stage" id="stage"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn yes" id="yesBtn"&gt;Yes 💖&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn no" id="noBtn"&gt;No 🙅‍♂️&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="result" id="result"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;It’s a yes 💖&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Dinner’s on me.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="confetti" id="confetti"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;audio id="bgMusic" loop&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;source src="cant-help-falling-in-love.mp3" type="audio/mpeg"&gt;</p>
-<p class="p1">&lt;/audio&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">const yesBtn = document.getElementById("yesBtn");</p>
-<p class="p1">const noBtn = document.getElementById("noBtn");</p>
-<p class="p1">const stage = document.getElementById("stage");</p>
-<p class="p1">const result = document.getElementById("result");</p>
-<p class="p1">const confetti = document.getElementById("confetti");</p>
-<p class="p1">const music = document.getElementById("bgMusic");</p>
-<p class="p2"><br></p>
-<p class="p1">let panicLevel = 1;</p>
-<p class="p2"><br></p>
-<p class="p1">// NO button panic escalation</p>
-<p class="p1">function moveNo(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const s = stage.getBoundingClientRect();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const b = noBtn.getBoundingClientRect();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const x = Math.random() * (s.width - b.width);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const y = Math.random() * (s.height - b.height);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>panicLevel += 0.25;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>noBtn.style.left = `${x}px`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>noBtn.style.top = `${y}px`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>noBtn.style.transform = `</p>
-<p class="p1"><span class="Apple-converted-space">    </span>rotate(${(Math.random()*20-10)*panicLevel}deg)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>scale(${1 + panicLevel*0.05})</p>
-<p class="p1"><span class="Apple-converted-space">  </span>`;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>noBtn.textContent =</p>
-<p class="p1"><span class="Apple-converted-space">    </span>panicLevel &gt; 3 ? "WAIT 😭" :</p>
-<p class="p1"><span class="Apple-converted-space">    </span>panicLevel &gt; 2 ? "NO NO NO" :</p>
-<p class="p1"><span class="Apple-converted-space">    </span>"No 🙅‍♂️";</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">noBtn.addEventListener("mouseenter", moveNo);</p>
-<p class="p1">noBtn.addEventListener("touchstart", e =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>e.preventDefault();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>moveNo();</p>
-<p class="p1">},{passive:false});</p>
-<p class="p2"><br></p>
-<p class="p1">document.addEventListener("mousemove", e =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const r = noBtn.getBoundingClientRect();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const cx = r.left + r.width/2;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const cy = r.top + r.height/2;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if (Math.hypot(e.clientX-cx,e.clientY-cy) &lt; 160) moveNo();</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">// CONFETTI</p>
-<p class="p1">function popConfetti(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>confetti.style.display="block";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>confetti.innerHTML="";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for(let i=0;i&lt;90;i++){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const s=document.createElement("span");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>s.style.left=Math.random()*100+"vw";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>s.style.background=`hsl(${Math.random()*360},90%,65%)`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>s.style.setProperty("--dx",(Math.random()*60-30)+"vw");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>confetti.appendChild(s);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// YES = start music + lock answer</p>
-<p class="p1">yesBtn.addEventListener("click",()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>stage.style.display="none";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>result.style.display="block";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>music.volume=0.6;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>music.play();<span class="Apple-converted-space">          </span>// ✅ ALWAYS starts here</p>
-<p class="p1"><span class="Apple-converted-space">  </span>popConfetti();</p>
-<p class="p1">});</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+  <!-- Sound gate (needed on phones because browsers block autoplay until user interacts) -->
+  <div class="soundOverlay" id="soundOverlay">
+    <div class="soundBox">
+      <h3>Tap once to enable sound 🎶</h3>
+      <p>After this, the music will keep playing in the background (loop).</p>
+      <button class="soundBtn" id="enableSoundBtn">Enable Sound</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="topbar">
+      <div class="pill">
+        <span>Background music</span>
+        <input class="toggle" id="musicToggle" type="checkbox" checked />
+      </div>
+
+      <div class="pill" id="statusPill">Sound: pending</div>
+    </div>
+
+    <h1>
+      <span class="glow">Aishwarya</span>, will you be my Valentine?
+    </h1>
+
+    <p class="sub">Shivang asking… who tf is <span class="glow">Ananya</span>? 😭</p>
+
+    <div class="stage" id="stage">
+      <button class="btn yes" id="yesBtn">Yes 💖</button>
+      <button class="btn no" id="noBtn">No 🙅‍♂️</button>
+    </div>
+
+    <div class="result" id="result">
+      <h2>It’s a YES 💖</h2>
+      <p>Okay cool… I’m smiling like an idiot now.</p>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <!-- Put your MP3 next to index.html with this exact filename -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="cant-help-falling-in-love.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const stage = document.getElementById("stage");
+    const result = document.getElementById("result");
+    const confetti = document.getElementById("confetti");
+    const music = document.getElementById("bgMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const soundOverlay = document.getElementById("soundOverlay");
+    const enableSoundBtn = document.getElementById("enableSoundBtn");
+    const statusPill = document.getElementById("statusPill");
+
+    let panicLevel = 1;
+    let soundEnabled = false;
+
+    function setStatus(text){
+      statusPill.textContent = text;
+    }
+
+    // ---- NO button panic escalation ----
+    function moveNo(){
+      const s = stage.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      const x = Math.random() * Math.max(0, (s.width - b.width));
+      const y = Math.random() * Math.max(0, (s.height - b.height));
+
+      panicLevel += 0.35;
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top  = `${y}px`;
+      noBtn.style.transform =
+        `rotate(${(Math.random()*24-12)*panicLevel}deg) scale(${1 + panicLevel*0.05})`;
+
+      if (panicLevel > 5)      noBtn.textContent = "BRO PLEASE 😭";
+      else if (panicLevel > 4) noBtn.textContent = "OK STOP 😵";
+      else if (panicLevel > 3) noBtn.textContent = "WAIT 😭";
+      else if (panicLevel > 2) noBtn.textContent = "NO NO NO";
+      else                     noBtn.textContent = "No 🙅‍♂️";
+    }
+
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNo();
+    }, { passive:false });
+
+    document.addEventListener("mousemove", (e) => {
+      const r = noBtn.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top  + r.height/2;
+      if (Math.hypot(e.clientX - cx, e.clientY - cy) < 150) moveNo();
+    });
+
+    // ---- CONFETTI ----
+    function popConfetti(){
+      confetti.style.display = "block";
+      confetti.innerHTML = "";
+      for(let i=0;i<90;i++){
+        const s = document.createElement("span");
+        s.style.left = (Math.random()*100) + "vw";
+        s.style.background = `hsl(${Math.random()*360},90%,65%)`;
+        s.style.setProperty("--dx", (Math.random()*60-30) + "vw");
+        confetti.appendChild(s);
+      }
+      // auto hide after a moment
+      setTimeout(() => { confetti.style.display = "none"; }, 1800);
+    }
+
+    // ---- AUDIO CONTROL ----
+    async function startMusic(){
+      if (!musicToggle.checked) return;
+      try{
+        music.volume = 0.65;
+        await music.play();
+        soundEnabled = true;
+        setStatus("Sound: ON");
+      } catch (err){
+        // Autoplay blocked until user interaction
+        soundEnabled = false;
+        setStatus("Sound: blocked (tap Enable Sound)");
+      }
+    }
+
+    function stopMusic(){
+      music.pause();
+      music.currentTime = 0;
+      setStatus("Sound: OFF");
+    }
+
+    musicToggle.addEventListener("change", async () => {
+      if (!soundEnabled){
+        // if not enabled yet, keep overlay path
+        setStatus("Sound: pending");
+        return;
+      }
+      if (musicToggle.checked) await startMusic();
+      else stopMusic();
+    });
+
+    enableSoundBtn.addEventListener("click", async () => {
+      soundOverlay.style.display = "none";
+      soundEnabled = true;
+      await startMusic();
+    });
+
+    // ---- YES click ----
+    yesBtn.addEventListener("click", async () => {
+      stage.style.display = "none";
+      result.style.display = "block";
+      popConfetti();
+
+      // Start music on YES no matter what (this is user interaction so it will work)
+      soundOverlay.style.display = "none";
+      soundEnabled = true;
+      musicToggle.checked = true;
+      await startMusic();
+    });
+
+    // Set initial status
+    setStatus("Sound: pending");
+  </script>
 </body>
 </html>
